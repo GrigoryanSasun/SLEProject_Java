@@ -80,7 +80,6 @@ public class Fraction {
         return this;
     }
 
-
     public String toString()
     {
         if (_numerator % _denominator == 0)
