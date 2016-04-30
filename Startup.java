@@ -4,10 +4,10 @@
 public class Startup {
     public static void main(String[] args) {
         String[][] matrixString = {
-                {"1", "1", "3", "1", "6"},
-                {"2", "-1", "0", "1", "-1"},
-                {"-3", "2", "1", "-2", "1"},
-                {"4", "1", "6", "1", "3"}
+                {"1", "1", "1", "1"},
+                {"1", "1", "1", "1"},
+                {"0", "1", "2", "3"},
+                {"0", "1", "2", "3"}
         };
         int rowLength = matrixString.length;
         Fraction[][] fractionArray = new Fraction[rowLength][];
