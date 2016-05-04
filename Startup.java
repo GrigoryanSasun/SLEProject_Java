@@ -1,13 +1,12 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 /**
  * Created by Grigoryan on 09.04.2016.
  */
 public class Startup {
     public static void main(String[] args) {
         String[][] matrixString = {
-                {"1", "1", "1", "1"},
-                {"1", "1", "1", "1"},
-                {"0", "1", "2", "3"},
-                {"0", "1", "2", "3"}
+                {"1", "2"}
         };
         int rowLength = matrixString.length;
         Fraction[][] fractionArray = new Fraction[rowLength][];
@@ -19,13 +18,15 @@ public class Startup {
                 fractionArray[i][j] = Fraction.ParseFraction(matrixString[i][j]);
             }
         }
-        SLESolver solver = new SLESolver();
-        Fraction[][] rowEchelonForm = solver.BringToReducedRowEchelonForm(fractionArray);
-        for (int i = 0; i < rowEchelonForm.length; i++) {
-            for (int j = 0; j < rowEchelonForm[i].length; j++) {
-                System.out.print(rowEchelonForm[i][j] + "\t");
-            }
-            System.out.println();
+        SLESolver solver = null;
+        try
+        {
+            solver = new SLESolver(new ConsoleSolutionWriter());
         }
+        catch(InvalidArgumentException exc)
+        {
+            System.out.println("error");
+        }
+        solver.SolveByGaussJordanElimination(fractionArray);
     }
 }
