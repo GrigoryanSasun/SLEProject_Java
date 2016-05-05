@@ -1,32 +1,29 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  * Created by Grigoryan on 09.04.2016.
  */
 public class Startup {
     public static void main(String[] args) {
-        String[][] matrixString = {
-                {"1", "2"}
-        };
-        int rowLength = matrixString.length;
-        Fraction[][] fractionArray = new Fraction[rowLength][];
-        int columnLength = 0;
-        for (int i = 0; i < rowLength; i++) {
-            columnLength = matrixString[0].length;
-            fractionArray[i] = new Fraction[columnLength];
-            for (int j = 0; j < columnLength; j++) {
-                fractionArray[i][j] = Fraction.ParseFraction(matrixString[i][j]);
+        ISolutionWriter solutionWriter = null;
+        ISLEReader sleReader = null;
+        for (int i = 0; i < args.length - 1; i += 2) {
+            if (args[i].equals("--inputfile")) {
+                sleReader = new FileSLEReader(args[i + 1]);
+            } else if (args[i].equals("--outputfile")) {
+                solutionWriter = new FileSolutionWriter(args[i + 1]);
             }
         }
-        SLESolver solver = null;
-        try
-        {
-            solver = new SLESolver(new ConsoleSolutionWriter());
+        if (sleReader == null) {
+            sleReader = new ConsoleSLEReader();
         }
-        catch(InvalidArgumentException exc)
-        {
-            System.out.println("error");
+        if (solutionWriter == null) {
+            solutionWriter = new ConsoleSolutionWriter();
         }
-        solver.SolveByGaussJordanElimination(fractionArray);
+        try {
+            Fraction[][] augmentedMatrix = sleReader.ReadSLEAugmentedMatrix();
+            SLESolver solver = new SLESolver(solutionWriter);
+            solver.SolveByGaussJordanElimination(augmentedMatrix);
+        } catch (Throwable exc) {
+            System.out.println(exc.getMessage());
+        }
     }
 }
