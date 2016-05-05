@@ -88,25 +88,36 @@ public class Fraction {
         }
         else
         {
-            return String.valueOf(_numerator) + "/" + String.valueOf(_denominator);
+            String sign = "";
+            if (_numerator / _denominator < 0) {
+                sign = "-";
+            }
+            return sign + String.valueOf(Math.abs(_numerator)) + "/" + String.valueOf(Math.abs(_denominator));
         }
     }
 
-    public static Fraction ParseFraction(String stringToParse)
+    public static Fraction ParseFraction(String stringToParse) throws InvalidFractionException
     {
         int newNumerator, newDenominator;
         int divisionIndex = stringToParse.indexOf('/');
-        if (divisionIndex == -1)
+        try
         {
-            newNumerator = Integer.parseInt(stringToParse);
-            newDenominator = 1;
+            if (divisionIndex == -1)
+            {
+                newNumerator = Integer.parseInt(stringToParse);
+                newDenominator = 1;
+            }
+            else
+            {
+                String numeratorString = stringToParse.substring(0,divisionIndex);
+                String denominatorString = stringToParse.substring(divisionIndex + 1,stringToParse.length());
+                newNumerator = Integer.parseInt(numeratorString);
+                newDenominator = Integer.parseInt(denominatorString);
+            }
         }
-        else
+        catch (NumberFormatException exc)
         {
-            String numeratorString = stringToParse.substring(0,divisionIndex);
-            String denominatorString = stringToParse.substring(divisionIndex + 1,stringToParse.length());
-            newNumerator = Integer.parseInt(numeratorString);
-            newDenominator = Integer.parseInt(denominatorString);
+            throw new InvalidFractionException();
         }
         return new Fraction(newNumerator,newDenominator);
     }

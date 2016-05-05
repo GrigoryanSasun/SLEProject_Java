@@ -3,6 +3,8 @@
  */
 public interface ISolutionWriter
 {
+    void StartWriting();
     void Write(String stringToWrite);
     void WriteLine(String stringToWrite);
+    void EndWriting();
 }

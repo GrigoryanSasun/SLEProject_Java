@@ -50,15 +50,17 @@ public class SLESolver {
             if (pivotArray[i] == true) {
                 int row = --pivotCount;
                 for (int j = row - 1; j >= 0; j--) {
-                    Fraction fractionToAdd = new Fraction(reducedRowEchelonForm[j][i]);
-                    fractionToAdd.SetNumerator(-1 * fractionToAdd.GetNumerator());
-                    _solutionWriter.WriteLine("R" + (row + 1) + " * (" + fractionToAdd.toString() + ")" + " + R" + (j + 1));
-                    for (int k = i; k <= pivotArray.length; k++) {
-                        Fraction multiply = new Fraction(reducedRowEchelonForm[row][k]);
-                        multiply.Multiply(fractionToAdd);
-                        reducedRowEchelonForm[j][k].Add(multiply);
+                    if (reducedRowEchelonForm[j][i].GetNumerator() != 0 ) {
+                        Fraction fractionToAdd = new Fraction(reducedRowEchelonForm[j][i]);
+                        fractionToAdd.SetNumerator(-1 * fractionToAdd.GetNumerator());
+                        _solutionWriter.WriteLine("R" + (row + 1) + " * (" + fractionToAdd.toString() + ")" + " + R" + (j + 1));
+                        for (int k = i; k <= pivotArray.length; k++) {
+                            Fraction multiply = new Fraction(reducedRowEchelonForm[row][k]);
+                            multiply.Multiply(fractionToAdd);
+                            reducedRowEchelonForm[j][k].Add(multiply);
+                        }
+                        PrintMatrix(reducedRowEchelonForm);
                     }
-                    PrintMatrix(reducedRowEchelonForm);
                 }
             }
         }
@@ -152,6 +154,7 @@ public class SLESolver {
     }
 
     public void SolveByGaussJordanElimination(Fraction[][] augmentedMatrix) {
+        _solutionWriter.StartWriting();
         int rowCount = augmentedMatrix.length;
         int columnCount = augmentedMatrix[0].length;
         _solutionWriter.WriteLine("We have the following augmented matrix:");
@@ -199,6 +202,7 @@ public class SLESolver {
                 }
             }
         }
+        _solutionWriter.EndWriting();
     }
 
     public SLESolver(ISolutionWriter solutionWriter) throws InvalidArgumentException {

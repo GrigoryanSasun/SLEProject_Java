@@ -3,6 +3,12 @@
  */
 public class ConsoleSolutionWriter implements ISolutionWriter
 {
+    public void StartWriting()
+    {}
+
+    public void EndWriting()
+    {}
+
     public void Write(String stringToWrite)
     {
         System.out.print(stringToWrite);
