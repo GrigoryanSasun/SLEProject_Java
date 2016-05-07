@@ -14,7 +14,7 @@ public class SLESolver {
         _solutionWriter = writer;
     }
 
-    public Fraction[][] BringToReducedRowEchelonForm(Fraction[][] rowEchelonForm) {
+    private Fraction[][] BringToReducedRowEchelonForm(Fraction[][] rowEchelonForm) {
         int rowCount = rowEchelonForm.length;
         int columnCount = rowEchelonForm[0].length;
         Fraction[][] reducedRowEchelonForm = new Fraction[rowCount][];
@@ -92,7 +92,7 @@ public class SLESolver {
         }
     }
 
-    public Fraction[][] BringToRowEchelonForm(Fraction[][] augmentedMatrix) {
+    private Fraction[][] BringToRowEchelonForm(Fraction[][] augmentedMatrix) {
         int rowLength = augmentedMatrix.length;
         int columnLength = augmentedMatrix[0].length;
         Fraction[][] matrixCopy = new Fraction[rowLength][];

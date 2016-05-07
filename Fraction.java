@@ -89,7 +89,7 @@ public class Fraction {
         else
         {
             String sign = "";
-            if (_numerator / _denominator < 0) {
+            if ((_numerator ^ _denominator) < 0) {
                 sign = "-";
             }
             return sign + String.valueOf(Math.abs(_numerator)) + "/" + String.valueOf(Math.abs(_denominator));
@@ -121,9 +121,6 @@ public class Fraction {
         }
         return new Fraction(newNumerator,newDenominator);
     }
-
-
-
 
     public Fraction(Fraction newFraction)
     {
