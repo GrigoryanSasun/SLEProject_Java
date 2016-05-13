@@ -11,7 +11,8 @@ public class FileSolutionWriter implements ISolutionWriter {
     public void StartWriting()
     {
         try {
-            _fileWriter = new PrintWriter(new FileWriter(_filePath));
+            _fileWriter = new PrintWriter(new FileWriter(_filePath,true));
+            _fileWriter.println("");
         }
         catch(IOException exc)
         {
@@ -39,6 +40,7 @@ public class FileSolutionWriter implements ISolutionWriter {
 
     public void EndWriting()
     {
+        _fileWriter.println("--------------");
         _fileWriter.close();
     }
 

@@ -4,10 +4,14 @@
 public class ConsoleSolutionWriter implements ISolutionWriter
 {
     public void StartWriting()
-    {}
+    {
+        System.out.println("");
+    }
 
     public void EndWriting()
-    {}
+    {
+        System.out.println("--------------");
+    }
 
     public void Write(String stringToWrite)
     {

@@ -8,39 +8,58 @@ public class FileSLEReader implements ISLEReader {
 
     private String _filePath;
 
-    public Fraction[][] ReadSLEAugmentedMatrix() {
-        try {
+    public SLEContainer[] ReadSLEAugmentedMatrices() {
+        try
+        {
             BufferedReader fileInput = new BufferedReader(new FileReader(_filePath));
             try
             {
-                boolean allLinesRead = false;
+                boolean allSLEsRead = false;
+                ArrayList<SLEContainer> sleContainers = new ArrayList<SLEContainer>();
+                ArrayList<Fraction[]> fractionList = new ArrayList<>();
                 int lastFoundColumnCount = 0;
-                ArrayList<Fraction[]> fractionList = new ArrayList<Fraction[]>();
-                while(!allLinesRead)
-                {
+                while (!allSLEsRead) {
                     String fractionsRow = fileInput.readLine();
                     if (fractionsRow == null)
                     {
-                        allLinesRead = true;
-                    }
-                    else {
-                        String[] fractionsStringArray = fractionsRow.split(" ");
-                        if (lastFoundColumnCount > 0)
+                        if (fractionList.size() != 0)
                         {
+                            Fraction[][] result = new Fraction[fractionList.size()][];
+                            result = fractionList.toArray(result);
+                            sleContainers.add(new SLEContainer(result));
+                        }
+                        allSLEsRead = true;
+                    }
+                    else if (fractionsRow.equals("--"))
+                    {
+                        if (fractionList.size() != 0)
+                        {
+                            Fraction[][] result = new Fraction[fractionList.size()][];
+                            result = fractionList.toArray(result);
+                            sleContainers.add(new SLEContainer(result));
+                        }
+                        fractionList.clear();
+                        lastFoundColumnCount = 0;
+                    }
+                    else
+                    {
+                        String[] fractionsStringArray = fractionsRow.split(" ");
+                        if (lastFoundColumnCount > 0) {
                             if (fractionsStringArray.length != lastFoundColumnCount)
                             {
-                                throw new Error("Invalid augmented matrix");
+                                throw new Error("Matrix #" + (sleContainers.size() + 1) + ": Invalid augmented matrix");
                             }
                         }
                         else if (fractionsStringArray.length < 2)
                         {
-                            throw new Error("Invalid augmented matrix");
+                            throw new Error("Matrix #" + (sleContainers.size() + 1) + ": Number of columns should be at least 2");
                         }
-                        else {
+                        else
+                        {
                             lastFoundColumnCount = fractionsStringArray.length;
                         }
                         Fraction[] fractionRow = new Fraction[lastFoundColumnCount];
-                        for (int i=0;i<fractionsStringArray.length;i++)
+                        for (int i = 0; i < fractionsStringArray.length; i++)
                         {
                             Fraction parsedFraction = Fraction.ParseFraction(fractionsStringArray[i]);
                             fractionRow[i] = parsedFraction;
@@ -48,12 +67,9 @@ public class FileSLEReader implements ISLEReader {
                         fractionList.add(fractionRow);
                     }
                 }
-                if (fractionList.size() == 0)
-                {
-                    throw new Error("The augmented matrix should have at least 1 row");
-                }
-                Fraction[][] result = new Fraction[fractionList.size()][];
-                return fractionList.toArray(result);
+                SLEContainer[] result = new SLEContainer[sleContainers.size()];
+                result = sleContainers.toArray(result);
+                return result;
             }
             finally
             {

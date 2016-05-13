@@ -72,14 +72,6 @@ public class Fraction {
         return this;
     }
 
-    public Fraction Subtract(Fraction fractionToSubtract)
-    {
-        Fraction minusFraction = new Fraction(fractionToSubtract);
-        minusFraction.Multiply(new Fraction(-1, 1));
-        this.Add(minusFraction);
-        return this;
-    }
-
     public String toString()
     {
         if (_numerator % _denominator == 0)

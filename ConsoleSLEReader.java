@@ -27,50 +27,63 @@ public class ConsoleSLEReader implements  ISLEReader {
         return number;
     }
 
-    public Fraction[][] ReadSLEAugmentedMatrix()
+    public SLEContainer[] ReadSLEAugmentedMatrices()
     {
-        int rowCount, columnCount;
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Input the number of rows of the augmented matrix: ");
-        String wrongRowCountErrorMessage = "Please input integer for the number of rows: ";
-        rowCount = InputInteger(wrongRowCountErrorMessage);
-        while (rowCount <= 0)
+        System.out.print("Input the number of systems of linear equations: ");
+        String wrongNumberOfSLEMessage = "Please input integer for the number of SLEs: ";
+        int sleCount = InputInteger(wrongNumberOfSLEMessage);
+        while (sleCount <= 0)
         {
-            System.out.print("The number of rows should be positive: ");
+            System.out.print("The number of SLEs should be positive: ");
+            sleCount = InputInteger(wrongNumberOfSLEMessage);
+        }
+        SLEContainer[] sleContainers = new SLEContainer[sleCount];
+        for (int k=0;k<sleCount;k++)
+        {
+            int rowCount, columnCount;
+            System.out.print("Input the number of rows of the augmented matrix: ");
+            String wrongRowCountErrorMessage = "Please input integer for the number of rows: ";
             rowCount = InputInteger(wrongRowCountErrorMessage);
-        }
-        System.out.print("Input the number of columns of the augmented matrix: ");
-        String wrongColumnCountErrorMessage = "Please input integer for the number of columns: ";
-        columnCount = InputInteger(wrongColumnCountErrorMessage);
-        while (columnCount <= 1)
-        {
-            System.out.print("The number of columns should be at least 2: ");
-            columnCount = InputInteger(wrongColumnCountErrorMessage);
-        }
-        Fraction[][] augmentedMatrix = new Fraction[rowCount][];
-        for (int i=0;i<rowCount;i++)
-        {
-            augmentedMatrix[i] = new Fraction[columnCount];
-            for (int j=0;j<columnCount;j++)
+            while (rowCount <= 0)
             {
-                System.out.print("Input [" + (i+1) + "][" + (j+1) + "]: ");
-                while (true)
+                System.out.print("The number of rows should be positive: ");
+                rowCount = InputInteger(wrongRowCountErrorMessage);
+            }
+            System.out.print("Input the number of columns of the augmented matrix: ");
+            String wrongColumnCountErrorMessage = "Please input integer for the number of columns: ";
+            columnCount = InputInteger(wrongColumnCountErrorMessage);
+            while (columnCount <= 1)
+            {
+                System.out.print("The number of columns should be at least 2: ");
+                columnCount = InputInteger(wrongColumnCountErrorMessage);
+            }
+            Fraction[][] augmentedMatrix = new Fraction[rowCount][];
+            for (int i=0;i<rowCount;i++)
+            {
+                augmentedMatrix[i] = new Fraction[columnCount];
+                for (int j=0;j<columnCount;j++)
                 {
-                    try {
-                        augmentedMatrix[i][j] = Fraction.ParseFraction(scanner.nextLine());
-                        break;
-                    }
-                    catch (InvalidFractionException exc)
+                    System.out.print("Input [" + (i+1) + "][" + (j+1) + "]: ");
+                    while (true)
                     {
-                        System.out.print("Invalid fraction, input again: ");
-                    }
-                    catch (Error exc)
-                    {
-                        System.out.print(exc.getMessage() + ": ");
+                        try {
+                            augmentedMatrix[i][j] = Fraction.ParseFraction(scanner.nextLine());
+                            break;
+                        }
+                        catch (InvalidFractionException exc)
+                        {
+                            System.out.print("Invalid fraction, input again: ");
+                        }
+                        catch (Error exc)
+                        {
+                            System.out.print(exc.getMessage() + ": ");
+                        }
                     }
                 }
             }
+            sleContainers[k] = new SLEContainer(augmentedMatrix);
         }
-        return augmentedMatrix;
+        return sleContainers;
     }
 }

@@ -19,10 +19,14 @@ public class Startup {
             solutionWriter = new ConsoleSolutionWriter();
         }
         try {
-            Fraction[][] augmentedMatrix = sleReader.ReadSLEAugmentedMatrix();
+            SLEContainer[] augmentedMatrixContainers = sleReader.ReadSLEAugmentedMatrices();
             SLESolver solver = new SLESolver(solutionWriter);
-            solver.SolveByGaussJordanElimination(augmentedMatrix);
-        } catch (Throwable exc) {
+            for (SLEContainer container : augmentedMatrixContainers)
+            {
+                solver.SolveByGaussJordanElimination(container.GetSLE());
+            }
+        }
+        catch (Throwable exc) {
             System.out.println(exc.getMessage());
         }
     }
